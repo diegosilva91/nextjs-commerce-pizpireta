@@ -1,6 +1,7 @@
 import Navbar from 'components/layout/navbar';
 import { ensureStartsWith } from 'lib/utils';
 import { Inter } from 'next/font/google';
+import localFont from 'next/font/local';
 import { ReactNode, Suspense } from 'react';
 import './globals.css';
 
@@ -37,9 +38,15 @@ const inter = Inter({
   variable: '--font-inter'
 });
 
+const brightness = localFont({
+  src: '../fonts/Brillo.ttf',
+  display: 'swap',
+  variable: '--font-brightness'
+});
+
 export default async function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={`${inter.variable} ${brightness.variable}`}>
       <body className="bg-neutral-50 text-black selection:bg-teal-300 dark:bg-neutral-900 dark:text-white dark:selection:bg-pink-500 dark:selection:text-white">
         <Navbar />
         <Suspense>
