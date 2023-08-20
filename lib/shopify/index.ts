@@ -86,9 +86,17 @@ export async function shopifyFetch<T>({
       cache,
       ...(tags && { next: { tags } })
     });
-
+    console.log('endpoint', endpoint);
+    console.log(
+      'body',
+      JSON.stringify({
+        ...(query && { query }),
+        ...(variables && { variables })
+      })
+    );
+    console.log('tags', { ...(tags && { next: { tags } }) });
     const body = await result.json();
-
+    console.log('body', body);
     if (body.errors) {
       throw body.errors[0];
     }
@@ -172,9 +180,9 @@ const reshapeImages = (images: Connection<Image>, productTitle: string) => {
 };
 
 const reshapeProduct = (product: ShopifyProduct, filterHiddenProducts: boolean = true) => {
-  if (!product || (filterHiddenProducts && product.tags.includes(HIDDEN_PRODUCT_TAG))) {
+  /*if (!product || (filterHiddenProducts && product.tags.includes(HIDDEN_PRODUCT_TAG))) {
     return undefined;
-  }
+  }*/
 
   const { images, variants, ...rest } = product;
 
@@ -304,7 +312,7 @@ export async function getCollectionProducts({
     console.log(`No collection found for \`${collection}\``);
     return [];
   }
-
+  console.log('collecitons', res.body.data.collection.products);
   return reshapeProducts(removeEdgesAndNodes(res.body.data.collection.products));
 }
 
@@ -328,9 +336,9 @@ export async function getCollections(): Promise<Collection[]> {
     },
     // Filter out the `hidden` collections.
     // Collections that start with `hidden-*` need to be hidden on the search page.
-    ...reshapeCollections(shopifyCollections).filter(
-      (collection) => !collection.handle.startsWith('hidden')
-    )
+    ...reshapeCollections(shopifyCollections) /*.filter(
+      (collection) => collection.handle.startsWith('hidden')
+    )*/
   ];
 
   return collections;
